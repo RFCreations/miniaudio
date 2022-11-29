@@ -3809,6 +3809,16 @@ typedef ma_uint16 wchar_t;
     #endif
 #endif
 
+#if defined(__clang__) || (defined(__GNUC__) && __GNUC__ >= 7)
+    #define MA_FALLTHROUGH __attribute__((fallthrough));
+#else
+    #define MA_FALLTHROUGH ((void)0)
+#endif
+#if defined(__has_c_attribute)
+    #if __has_c_attribute(fallthrough)
+        #define MA_FALLTHROUGH [[fallthrough]]
+    #endif
+#endif
 
 #ifdef _MSC_VER
     #define MA_INLINE __forceinline
@@ -31029,15 +31039,15 @@ static ma_result ma_get_channel_map_from_AudioChannelLayout(AudioChannelLayout* 
             {
                 pChannelMap[7] = MA_CHANNEL_SIDE_RIGHT;
                 pChannelMap[6] = MA_CHANNEL_SIDE_LEFT;
-            } /* Intentional fallthrough. */
+            } MA_FALLTHROUGH; /* Intentional fallthrough. */
             case kAudioChannelLayoutTag_Hexagonal:
             {
                 pChannelMap[5] = MA_CHANNEL_BACK_CENTER;
-            } /* Intentional fallthrough. */
+            } MA_FALLTHROUGH; /* Intentional fallthrough. */
             case kAudioChannelLayoutTag_Pentagonal:
             {
                 pChannelMap[4] = MA_CHANNEL_FRONT_CENTER;
-            } /* Intentional fallghrough. */
+            } MA_FALLTHROUGH; /* Intentional fallthrough. */
             case kAudioChannelLayoutTag_Quadraphonic:
             {
                 pChannelMap[3] = MA_CHANNEL_BACK_RIGHT;
